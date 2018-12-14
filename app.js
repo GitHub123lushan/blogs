@@ -43,7 +43,14 @@ app.post("/user/register",(req,res) => {
 })
 //用户登录路由
 app.post("/user/login",(req,res) => {
-    
+    const data = req.body
+    if(!data.username.trim()|| !data.password.trim()) return res.status(400).send({status:400,msg:"用户名或密码不能为空"})
+    const sql  = "select * from user where username=? and password = ?"
+    conn.query(sql,[data.username.trim(),data.password.trim()],(err,result)=>{
+        if(err) return res.status(500).send({status:500,msg:"服务器响应失败 请重试"})
+        if(result.length === 0) return res.status(400).send({status:400,msg:"用户名或密码有误 请重新输入"})
+        res.send({status:200,msg:"登录成功"})
+    })
 })
 
 app.listen(80,()=>{

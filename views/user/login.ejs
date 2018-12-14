@@ -47,7 +47,22 @@
 
   <script src="/node_modules/jquery/dist/jquery.min.js"></script>
   <script>
-   
+   $("#form").on("submit",function(e){
+     $.ajax({
+       url:"/user/login",
+       data:$("#form").serialize(),
+      type:"post",
+      success:function(res){
+        alert(res.msg)
+        location.href="/"
+      },
+      error:function(err){
+        alert(err.responseJSON.msg)
+      }
+
+      })
+      e.preventDefault()
+   })
   </script>
 </body>
 
