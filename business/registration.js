@@ -1,6 +1,5 @@
 const moment = require("moment")//导入时间格式模块
 const conn = require("../bd/bd")
-
 module.exports = {
     git_login (req,res) {
         res.render("user/login",{})
@@ -30,7 +29,12 @@ module.exports = {
         conn.query(sql,[data.username.trim(),data.password.trim()],(err,result)=>{
             if(err) return res.status(500).send({status:500,msg:"服务器响应失败 请重试"})
             if(result.length === 0) return res.status(400).send({status:400,msg:"用户名或密码有误 请重新输入"})
+            req.session.result = result
             res.send({status:200,msg:"登录成功"})
         })
+    },
+    get_Logout(req,res) {
+        req.session.result = null;
+        res.redirect('/');　
     }
 }
